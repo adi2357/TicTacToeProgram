@@ -67,16 +67,31 @@ public class TicTacToeGame {
 	}
 
 //UC 5 : MAKE THE MOVE AT GIVEN POSITION
-	private char[] makeMoveAtPosition(char[] board) {
+	private char[] makeMoveAtPosition(char[] board, int tossValue) {
 		this.board = board;
-		System.out.println("Select position from 1 to 9 to make a move : ");
-		int boardPosition = SC.nextInt();
-		boolean isEmptyPosition = isEmptyAtPosition(board, boardPosition);
-		if (isEmptyPosition) {
-			System.out.println("Position is empty");
-			board[boardPosition] = inputs[0];
-		} else
-			System.out.println("Position is not empty");
+		boolean isEmptyPosition = false;
+		if (tossValue == USER) {
+			System.out.println("Select position from 1 to 9 to make a move : ");
+			while (!isEmptyPosition) {
+				int boardPosition = SC.nextInt();
+				isEmptyPosition = isEmptyAtPosition(board, boardPosition);
+				if (isEmptyPosition) {
+					System.out.println("Position is empty");
+					board[boardPosition] = inputs[0];
+				} else {
+					System.out.println("Position is not empty. Enter another position");
+					showBoard(board);
+				}
+			}
+		}
+		if (tossValue == COMPUTER) {
+			while (!isEmptyPosition) {
+				int boardPosition = (int) (Math.random() * 10 % 9) + 1;
+				isEmptyPosition = isEmptyAtPosition(board, boardPosition);
+				if (isEmptyPosition)
+					board[boardPosition] = inputs[1];
+			}
+		}
 		return board;
 	}
 
@@ -116,21 +131,50 @@ public class TicTacToeGame {
 		return isWinner;
 	}
 
-	public static void main(String[] args) {
-		TicTacToeGame gameObject = new TicTacToeGame();
-		char[] newBoard = gameObject.addBoard();
-		gameObject.showBoard(newBoard);
-		int toss = gameObject.toss();
-		if (toss == USER)
-			inputs = gameObject.selectInput();
-		else if(toss==COMPUTER){
+	public boolean isBoardFull(char[] board) {
+		for (int i = 1; i < board.length; i++) {
+			if (board[i] == ' ')
+				return false;
+		}
+		return true;
+	}
+
+	public void start() {
+
+		char[] board = addBoard();
+		showBoard(board);
+		int tossValue = toss();
+		if (tossValue == USER)
+			inputs = selectInput();
+		else if (tossValue == COMPUTER) {
 			inputs[0] = 'O';
 			inputs[1] = 'X';
 		}
-		newBoard = gameObject.makeMoveAtPosition(newBoard);
-		gameObject.showBoard(newBoard);
-		boolean userWins = gameObject.isWinning(newBoard, inputs[0]);
-		System.out.println("User Wins : " + userWins);
+		boolean winsGame = false;
+		boolean userWins = false;
+		boolean computerWins = false;
+		boolean isFull = false;
+
+		while (!(winsGame || isFull)) {
+			board = makeMoveAtPosition(board, tossValue);
+			showBoard(board);
+			userWins = isWinning(board, inputs[0]);
+			computerWins = isWinning(board, inputs[1]);
+			winsGame = userWins || computerWins;
+			isFull = isBoardFull(board);
+			tossValue = tossValue % 2 + 1;
+		}
+		if (userWins == true)
+			System.out.println("User Wins Tic Tac Toe Game");
+		else if (computerWins == true)
+			System.out.println("Computer Wins Tic Tac Toe Game");
+		else if (userWins == false && computerWins == false)
+			System.out.println("TIE");
+	}
+
+	public static void main(String[] args) {
+		TicTacToeGame gameObject = new TicTacToeGame();
+		gameObject.start();
 	}
 
 }
