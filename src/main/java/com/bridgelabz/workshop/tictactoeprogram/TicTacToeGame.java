@@ -130,7 +130,8 @@ public class TicTacToeGame {
 			isWinner = false;
 		return isWinner;
 	}
-
+	
+//CHECK IF BOARD IS FULL
 	public boolean isBoardFull(char[] board) {
 		for (int i = 1; i < board.length; i++) {
 			if (board[i] == ' ')
@@ -138,7 +139,8 @@ public class TicTacToeGame {
 		}
 		return true;
 	}
-
+	
+//START THE GAME
 	public void start() {
 
 		char[] board = addBoard();
@@ -172,6 +174,7 @@ public class TicTacToeGame {
 			System.out.println("TIE");
 	}
 
+//MAIN METHOD
 	public static void main(String[] args) {
 		TicTacToeGame gameObject = new TicTacToeGame();
 		gameObject.start();
