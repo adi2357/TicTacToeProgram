@@ -1,12 +1,13 @@
 package com.bridgelabz.workshop.tictactoeprogram;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class TicTacToeGame {
 	public static final Scanner SC = new Scanner(System.in);
 	public static char[] board;
-	public static char[] inputs=new char[2];
+	public static char[] inputs = new char[2];
 	public static final int USER = 1;
 	public static final int COMPUTER = 2;
 
@@ -79,28 +80,57 @@ public class TicTacToeGame {
 		return board;
 	}
 
-//UC 6 : TOSS TO CHECK FIRST PLAYER
-	public char[] toss() {
+//UC 6 : TOSS TO SELECT FIRST PLAYER
+	public int toss() {
 		int toss = (int) (Math.random() * 10 % 2) + 1;
-		if (toss == USER){
+		if (toss == USER) {
 			System.out.println("User plays first");
-			inputs = selectInput();
-		}
-		else {
+		} else {
 			System.out.println("Computer plays first");
-			this.inputs[0] = 'O';
-			this.inputs[1] = 'X';
 		}
-		return inputs;
+		return toss;
+	}
+
+//UC 7 : WINNING CONDITION
+	public boolean isWinning(char[] board, char character) {
+
+		boolean isWinner = false;
+		if (board[1] == character && board[2] == character && board[3] == character)
+			isWinner = true;
+		else if (board[4] == character && board[5] == character && board[6] == character)
+			isWinner = true;
+		else if (board[7] == character && board[8] == character && board[9] == character)
+			isWinner = true;
+		else if (board[1] == character && board[4] == character && board[7] == character)
+			isWinner = true;
+		else if (board[2] == character && board[5] == character && board[8] == character)
+			isWinner = true;
+		else if (board[3] == character && board[6] == character && board[9] == character)
+			isWinner = true;
+		else if (board[1] == character && board[5] == character && board[9] == character)
+			isWinner = true;
+		else if (board[3] == character && board[5] == character && board[7] == character)
+			isWinner = true;
+		else
+			isWinner = false;
+		return isWinner;
 	}
 
 	public static void main(String[] args) {
 		TicTacToeGame gameObject = new TicTacToeGame();
 		char[] newBoard = gameObject.addBoard();
-		inputs = gameObject.toss();
-//		gameObject.showBoard(newBoard);
-//		newBoard = gameObject.makeMoveAtPosition(newBoard);
-//		gameObject.showBoard(newBoard);
+		gameObject.showBoard(newBoard);
+		int toss = gameObject.toss();
+		if (toss == USER)
+			inputs = gameObject.selectInput();
+		else if(toss==COMPUTER){
+			inputs[0] = 'O';
+			inputs[1] = 'X';
+		}
+		newBoard = gameObject.makeMoveAtPosition(newBoard);
+		gameObject.showBoard(newBoard);
+		boolean userWins = gameObject.isWinning(newBoard, inputs[0]);
+		System.out.println("User Wins : " + userWins);
 	}
 
 }
