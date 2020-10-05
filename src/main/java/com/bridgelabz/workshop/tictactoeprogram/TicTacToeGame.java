@@ -6,7 +6,9 @@ import java.util.Scanner;
 public class TicTacToeGame {
 	public static final Scanner SC = new Scanner(System.in);
 	public static char[] board;
-	public static char[] inputs;
+	public static char[] inputs=new char[2];
+	public static final int USER = 1;
+	public static final int COMPUTER = 2;
 
 //UC1 :	ADD BOARD
 	private static char[] addBoard() {
@@ -52,8 +54,8 @@ public class TicTacToeGame {
 		}
 	}
 
-//UC 4 : MOVE TO BOARD LOCATION
-	private boolean moveToPosition(char[] boardInputs, int boardPosition) {
+//UC 4 : MOVE TO BOARD LOCATION AND CHECK EMPTY POSITION
+	private boolean isEmptyAtPosition(char[] boardInputs, int boardPosition) {
 		boolean isEmpty = false;
 		if (boardPosition >= 1 && boardPosition <= 9) {
 			if (boardInputs[boardPosition] == ' ')
@@ -66,9 +68,9 @@ public class TicTacToeGame {
 //UC 5 : MAKE THE MOVE AT GIVEN POSITION
 	private char[] makeMoveAtPosition(char[] board) {
 		this.board = board;
-		System.out.println("Select position from 1 to 9 : ");
+		System.out.println("Select position from 1 to 9 to make a move : ");
 		int boardPosition = SC.nextInt();
-		boolean isEmptyPosition = moveToPosition(board, boardPosition);
+		boolean isEmptyPosition = isEmptyAtPosition(board, boardPosition);
 		if (isEmptyPosition) {
 			System.out.println("Position is empty");
 			board[boardPosition] = inputs[0];
@@ -77,13 +79,28 @@ public class TicTacToeGame {
 		return board;
 	}
 
-	public static void main(String[] args) throws Exception {
+//UC 6 : TOSS TO CHECK FIRST PLAYER
+	public char[] toss() {
+		int toss = (int) (Math.random() * 10 % 2) + 1;
+		if (toss == USER){
+			System.out.println("User plays first");
+			inputs = selectInput();
+		}
+		else {
+			System.out.println("Computer plays first");
+			this.inputs[0] = 'O';
+			this.inputs[1] = 'X';
+		}
+		return inputs;
+	}
+
+	public static void main(String[] args) {
 		TicTacToeGame gameObject = new TicTacToeGame();
 		char[] newBoard = gameObject.addBoard();
-		inputs = gameObject.selectInput();
-		gameObject.showBoard(newBoard);
-		newBoard = gameObject.makeMoveAtPosition(newBoard);
-		gameObject.showBoard(newBoard);
+		inputs = gameObject.toss();
+//		gameObject.showBoard(newBoard);
+//		newBoard = gameObject.makeMoveAtPosition(newBoard);
+//		gameObject.showBoard(newBoard);
 	}
 
 }
