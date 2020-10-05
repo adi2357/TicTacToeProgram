@@ -63,16 +63,27 @@ public class TicTacToeGame {
 		return isEmpty;
 	}
 
+//UC 5 : MAKE THE MOVE AT GIVEN POSITION
+	private char[] makeMoveAtPosition(char[] board) {
+		this.board = board;
+		System.out.println("Select position from 1 to 9 : ");
+		int boardPosition = SC.nextInt();
+		boolean isEmptyPosition = moveToPosition(board, boardPosition);
+		if (isEmptyPosition) {
+			System.out.println("Position is empty");
+			board[boardPosition] = inputs[0];
+		} else
+			System.out.println("Position is not empty");
+		return board;
+	}
 
 	public static void main(String[] args) throws Exception {
 		TicTacToeGame gameObject = new TicTacToeGame();
 		char[] newBoard = gameObject.addBoard();
 		inputs = gameObject.selectInput();
 		gameObject.showBoard(newBoard);
-		System.out.println("Select position from 1 to 9 : ");
-		int boardPosition=SC.nextInt();
-		boolean isEmptyPosition=gameObject.moveToPosition(newBoard,boardPosition);
-		System.out.println("Position is Empty : "+isEmptyPosition);
+		newBoard = gameObject.makeMoveAtPosition(newBoard);
+		gameObject.showBoard(newBoard);
 	}
 
 }
