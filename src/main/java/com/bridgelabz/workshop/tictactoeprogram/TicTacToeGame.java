@@ -84,16 +84,18 @@ public class TicTacToeGame {
 			}
 		}
 		if (tossValue == COMPUTER) {
-			int boardPosition = nextWinnigMovePosition(board);
+			int boardPosition = nextWinnigMovePosition(board, inputs[1]);
 			if (boardPosition == 0) {
-				while (!isEmptyPosition) {
-					boardPosition = (int) (Math.random() * 10 % 9) + 1;
-					isEmptyPosition = isEmptyAtPosition(board, boardPosition);
-					if (isEmptyPosition)
-						board[boardPosition] = inputs[1];
-				}
-			} else
-				board[boardPosition] = inputs[1];
+				boardPosition = nextWinnigMovePosition(board, inputs[0]);
+				if (boardPosition == 0) {
+					while (!isEmptyPosition) {
+						boardPosition = (int) (Math.random() * 10 % 9) + 1;
+						isEmptyPosition = isEmptyAtPosition(board, boardPosition);
+						if (isEmptyPosition)
+							board[boardPosition] = inputs[1];
+					}
+				} else board[boardPosition] = inputs[1];
+			} else	board[boardPosition] = inputs[1];
 		}
 		return board;
 	}
@@ -144,14 +146,14 @@ public class TicTacToeGame {
 	}
 
 //UC 8 : COMPUTER FINDS NEXT POSITION FOR WINNING TO MAKE A MOVE
-	public int nextWinnigMovePosition(char[] board) {
+	public int nextWinnigMovePosition(char[] board, char character) {
 		char[] tempBoard = board;
 		int winnigPosition = 0;
 		int position = 1;
 		while (position <= 9) {
 			if (isEmptyAtPosition(board, position)) {
-				tempBoard[position] = inputs[1];
-				if (isWinning(tempBoard, inputs[1])) {
+				tempBoard[position] = character;
+				if (isWinning(tempBoard, character)) {
 					winnigPosition = position;
 					break;
 				} else {
