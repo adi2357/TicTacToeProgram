@@ -75,7 +75,7 @@ public class TicTacToeGame {
 				int boardPosition = SC.nextInt();
 				isEmptyPosition = isEmptyAtPosition(board, boardPosition);
 				if (isEmptyPosition) {
-					System.out.println("Position is empty");
+//					System.out.println("Position is empty");
 					board[boardPosition] = inputs[0];
 				} else {
 					System.out.println("Position is not empty. Enter another position");
@@ -88,13 +88,16 @@ public class TicTacToeGame {
 			if (boardPosition == 0) {
 				boardPosition = nextWinnigMovePosition(board, inputs[0]);
 				if (boardPosition == 0) {
-					while (!isEmptyPosition) {
-						boardPosition = (int) (Math.random() * 10 % 9) + 1;
-						isEmptyPosition = isEmptyAtPosition(board, boardPosition);
-						if (isEmptyPosition)
-							board[boardPosition] = inputs[1];
-					}
-				} else board[boardPosition] = inputs[1];
+					boardPosition = getEmptyCorner(board);
+					if(boardPosition == 0) {
+						while (!isEmptyPosition) {
+							boardPosition = (int) (Math.random() * 10 % 9) + 1;
+							isEmptyPosition = isEmptyAtPosition(board, boardPosition);
+							if (isEmptyPosition)
+								board[boardPosition] = inputs[1];
+						}
+					}else board[boardPosition] = inputs[1];
+				} else	board[boardPosition] = inputs[1];
 			} else	board[boardPosition] = inputs[1];
 		}
 		return board;
@@ -166,6 +169,17 @@ public class TicTacToeGame {
 			position++;
 		}
 		return winnigPosition;
+	}
+
+//UC 10 : COMPUTER CHECKS FOR EMPTY CORNERS IN CASE OF TIE
+	public int getEmptyCorner(char[] board) {
+		int emptyCornerPosition = 0;
+		int[] cornerPositions = { 1, 3, 7, 9 };
+		for (int i = 0; i < 4; i++) {
+			if (isEmptyAtPosition(board, cornerPositions[i]))
+				emptyCornerPosition = cornerPositions[i];
+		}
+		return emptyCornerPosition;
 	}
 
 //START THE GAME
