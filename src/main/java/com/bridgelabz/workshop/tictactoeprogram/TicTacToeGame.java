@@ -1,7 +1,6 @@
 package com.bridgelabz.workshop.tictactoeprogram;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class TicTacToeGame {
@@ -68,7 +67,7 @@ public class TicTacToeGame {
 
 //UC 5 : MAKE THE MOVE AT GIVEN POSITION
 	private char[] makeMoveAtPosition(char[] board, int tossValue) {
-		this.board = board;
+		TicTacToeGame.board = board;
 		boolean isEmptyPosition = false;
 		if (tossValue == USER) {
 			System.out.println("Select position from 1 to 9 to make a move : ");
@@ -85,12 +84,16 @@ public class TicTacToeGame {
 			}
 		}
 		if (tossValue == COMPUTER) {
-			while (!isEmptyPosition) {
-				int boardPosition = (int) (Math.random() * 10 % 9) + 1;
-				isEmptyPosition = isEmptyAtPosition(board, boardPosition);
-				if (isEmptyPosition)
-					board[boardPosition] = inputs[1];
-			}
+			int boardPosition = nextWinnigMovePosition(board);
+			if (boardPosition == 0) {
+				while (!isEmptyPosition) {
+					boardPosition = (int) (Math.random() * 10 % 9) + 1;
+					isEmptyPosition = isEmptyAtPosition(board, boardPosition);
+					if (isEmptyPosition)
+						board[boardPosition] = inputs[1];
+				}
+			} else
+				board[boardPosition] = inputs[1];
 		}
 		return board;
 	}
@@ -130,7 +133,7 @@ public class TicTacToeGame {
 			isWinner = false;
 		return isWinner;
 	}
-	
+
 //CHECK IF BOARD IS FULL
 	public boolean isBoardFull(char[] board) {
 		for (int i = 1; i < board.length; i++) {
@@ -139,7 +142,30 @@ public class TicTacToeGame {
 		}
 		return true;
 	}
-	
+
+//UC 8 : COMPUTER FINDS NEXT POSITION FOR WINNING TO MAKE A MOVE
+	public int nextWinnigMovePosition(char[] board) {
+		char[] tempBoard = board;
+		int winnigPosition = 0;
+		int position = 1;
+		while (position <= 9) {
+			if (isEmptyAtPosition(board, position)) {
+				tempBoard[position] = inputs[1];
+				if (isWinning(tempBoard, inputs[1])) {
+					winnigPosition = position;
+					break;
+				} else {
+					tempBoard[position] = ' ';
+				}
+			} else {
+				position++;
+				continue;
+			}
+			position++;
+		}
+		return winnigPosition;
+	}
+
 //START THE GAME
 	public void start() {
 
