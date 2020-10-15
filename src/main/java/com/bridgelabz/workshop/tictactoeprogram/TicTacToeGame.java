@@ -244,7 +244,16 @@ public class TicTacToeGame {
 //MAIN METHOD
 	public static void main(String[] args) {
 		TicTacToeGame gameObject = new TicTacToeGame();
-		gameObject.start();
+		boolean playAnotherGame;
+		do {
+			playAnotherGame=false;
+			gameObject.start();
+			System.out.println("\nPlay another game(y/n)");
+			if(SC.next().equalsIgnoreCase("Y"))
+				playAnotherGame=true;
+			else
+				System.out.println("Exiting game");
+		}while(playAnotherGame);
 	}
 
 }
