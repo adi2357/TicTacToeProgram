@@ -1,6 +1,8 @@
 package com.bridgelabz.workshop.tictactoeprogram;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class TicTacToeGame {
@@ -70,12 +72,12 @@ public class TicTacToeGame {
 		TicTacToeGame.board = board;
 		boolean isEmptyPosition = false;
 		if (tossValue == USER) {
+			System.out.println("USER'S TURN : ");
 			System.out.println("Select position from 1 to 9 to make a move : ");
 			while (!isEmptyPosition) {
 				int boardPosition = SC.nextInt();
 				isEmptyPosition = isEmptyAtPosition(board, boardPosition);
 				if (isEmptyPosition) {
-//					System.out.println("Position is empty");
 					board[boardPosition] = inputs[0];
 				} else {
 					System.out.println("Position is not empty. Enter another position");
@@ -84,19 +86,16 @@ public class TicTacToeGame {
 			}
 		}
 		if (tossValue == COMPUTER) {
-			int boardPosition = nextWinnigMovePosition(board, inputs[1]);
+			System.out.println("COMPUTER'S TURN : ");
+			int boardPosition = nextWinnigMovePosition(board, inputs[1]);// MAKES WINNING MOVE
 			if (boardPosition == 0) {
-				boardPosition = nextWinnigMovePosition(board, inputs[0]);
+				boardPosition = nextWinnigMovePosition(board, inputs[0]);// BLOCKS WINNIG MOVE OF USER
 				if (boardPosition == 0) {
-					boardPosition = getEmptyCorner(board);
-					if(boardPosition == 0) {
-						while (!isEmptyPosition) {
-							boardPosition = (int) (Math.random() * 10 % 9) + 1;
-							isEmptyPosition = isEmptyAtPosition(board, boardPosition);
-							if (isEmptyPosition)
-								board[boardPosition] = inputs[1];
-						}
-					}else board[boardPosition] = inputs[1];
+					boardPosition = getEmptyCorner(board);// MAKES MOVE AT EMPTY CORNERS
+					if (boardPosition == 0) {
+						boardPosition = getEmptyCentreOrNonCorner(board);// MAKES MOVE AT EMPTY CENTRE OR NON CORNERS
+						board[boardPosition] = inputs[1];
+					} else	board[boardPosition] = inputs[1];
 				} else	board[boardPosition] = inputs[1];
 			} else	board[boardPosition] = inputs[1];
 		}
@@ -174,12 +173,38 @@ public class TicTacToeGame {
 //UC 10 : COMPUTER CHECKS FOR EMPTY CORNERS IN CASE OF TIE
 	public int getEmptyCorner(char[] board) {
 		int emptyCornerPosition = 0;
+		List<Integer> totalEmptyCornerPositions = new ArrayList<>();
 		int[] cornerPositions = { 1, 3, 7, 9 };
 		for (int i = 0; i < 4; i++) {
 			if (isEmptyAtPosition(board, cornerPositions[i]))
-				emptyCornerPosition = cornerPositions[i];
+				totalEmptyCornerPositions.add(cornerPositions[i]);
 		}
+		try {
+			int randomPosition = (int) Math.floor(Math.random() * 10) % totalEmptyCornerPositions.size();
+			emptyCornerPosition = totalEmptyCornerPositions.get(randomPosition);
+		} catch (ArithmeticException e) {}
 		return emptyCornerPosition;
+	}
+	
+//UC 11 : COMPUTER CHECKS FOR EMPTY CENTRE AND EMPTY NON CORNER CELLS TO MAKE A MOVE
+	public int getEmptyCentreOrNonCorner(char[] board) {
+		int emptyPosition = 0;
+		if(isEmptyAtPosition(board, 5)) {
+				emptyPosition=5;
+		}
+		else {
+			List<Integer> totalEmptyNonCornerPositions = new ArrayList<>();
+			int[] nonCornerPositions = { 2, 4, 6, 8 };
+			for (int i = 0; i < 4; i++) {
+				if (isEmptyAtPosition(board, nonCornerPositions[i])) 
+					totalEmptyNonCornerPositions.add(nonCornerPositions[i]);				
+			}
+			try {
+				int randomPosition = (int) Math.floor(Math.random() * 10) % totalEmptyNonCornerPositions.size();
+				emptyPosition = totalEmptyNonCornerPositions.get(randomPosition);
+			} catch(ArithmeticException e) {}
+		}
+		return emptyPosition;
 	}
 
 //START THE GAME
