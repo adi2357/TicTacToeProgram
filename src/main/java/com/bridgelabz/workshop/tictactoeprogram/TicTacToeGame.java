@@ -138,7 +138,7 @@ public class TicTacToeGame {
 		return isWinner;
 	}
 
-//CHECK IF BOARD IS FULL
+//UC 12 : CHECK IF BOARD IS FULL
 	public boolean isBoardFull(char[] board) {
 		for (int i = 1; i < board.length; i++) {
 			if (board[i] == ' ')
